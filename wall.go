@@ -83,26 +83,26 @@ func write(w http.ResponseWriter, r *http.Request) {
 }
 
 // = HELPER ========================================================
-// Identifies hashtags and username-like strings. Replaces hashtags
-// with links to a Twitter search for the found hashtag and replaces
-// username-like strings with links to the Twitter profile *if* a
-// valid profile is found.
+// Identifies hashtags and Twitter handle-like strings. Replaces
+// hashtags with links to a Twitter search for the found hashtag and
+// replaces handle-like strings with links to the Twitter profile
+// *if* a valid profile is found.
 // =================================================================
 func twitterize(ctx context.Context, content string) string {
 	newContent := hashtagRegexp.ReplaceAllString(content, linkToHashtag)
 
 	matches := usernameRegexp.FindAllString(newContent, -1)
-	for _, username := range matches {
+	for _, handle := range matches {
 		// // = CHECKPOINT 2, PART 1: UNCOMMENT THIS BLOCK ===============
 		// _, span := beeline.StartSpan(ctx, "check_twitter")
 		// // ============================================================
-		profile := "https://twitter.com/" + username[1:]
+		profile := "https://twitter.com/" + handle[1:]
 		resp, _ := http.Get(profile)
 		if resp.StatusCode == http.StatusOK {
-			newContent = strings.Replace(newContent, username, fmt.Sprintf(linkToProfile, profile, username), 1)
+			newContent = strings.Replace(newContent, handle, fmt.Sprintf(linkToProfile, profile, handle), 1)
 		}
 		// // = CHECKPOINT 2, PART 2: UNCOMMENT THIS BLOCK ===============
-		// span.AddField("app.twitter.username", username)
+		// span.AddField("app.twitter.handle", handle)
 		// span.AddField("app.twitter.response_status", resp.StatusCode)
 		// span.Send()
 		// // ============================================================
