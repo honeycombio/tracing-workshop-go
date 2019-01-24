@@ -28,7 +28,7 @@ var (
 
 const (
 	HONEYCOMB_API_KEY = "e841bedc1eb9ffd93c4c958b74e2d877"
-	HONEYCOMB_DATASET = "dryrun-workshop"
+	HONEYCOMB_DATASET = "workshop"
 
 	linkToHashtag = `<a href="https://twitter.com/hashtag/$1">#$1</a>`
 	linkToProfile = `<a href="%s">%s</a>`

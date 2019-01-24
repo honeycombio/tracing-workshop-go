@@ -15,7 +15,7 @@ import (
 
 const (
 	HONEYCOMB_API_KEY = "e841bedc1eb9ffd93c4c958b74e2d877"
-	HONEYCOMB_DATASET = "dryrun-workshop"
+	HONEYCOMB_DATASET = "workshop"
 
 	GCP_URL_TEMPLATE = "https://language.googleapis.com/v1/documents:analyzeSentiment?key=%s"
 	GCP_API_KEY      = "AIzaSyAXdTnJgZu0oMUb4I3VN2Mepx_KpXBB5RA"
