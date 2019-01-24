@@ -45,3 +45,7 @@ go run ./analysis.go
 ```
 
 But you won't be interacting with it directly; the `wall` service will simply ping `localhost:8088` in hopes of the `analysis` service being alive.
+
+## Security fine print 
+
+Any API keys included in this repository are included for ease of use during the workshop and will be rendered null and void after the event on January 24th, 2019.
