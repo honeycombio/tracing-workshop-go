@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -24,6 +26,7 @@ var (
 
 	usernameRegexp = regexp.MustCompile(`@([a-z0-9_]+)`)
 	hashtagRegexp  = regexp.MustCompile(`#([a-z0-9]+)`)
+	buildID        string
 )
 
 const (
@@ -33,6 +36,7 @@ const (
 	linkToHashtag = `<a href="https://twitter.com/hashtag/$1">#$1</a>`
 	linkToProfile = `<a href="%s">%s</a>`
 	persistURL    = "https://p3m11fv104.execute-api.us-east-1.amazonaws.com/dev/"
+	buildIDLength = 4
 )
 
 // = HANDLER =======================================================
@@ -173,6 +177,14 @@ func withTracing(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+func randomBuildID() (string, error) {
+	bytes := make([]byte, buildIDLength)
+	if _, err := rand.Read(bytes); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(bytes), nil
+}
+
 // = MAIN ==========================================================
 // Entry point for our "wall" service.
 // =================================================================
@@ -184,6 +196,11 @@ func main() {
 	})
 	defer beeline.Close()
 
+	buildID, err := randomBuildID()
+	if err != nil {
+		logrus.WithField("error", err).Fatal("Error generating build ID")
+	}
+
 	http.HandleFunc("/favicon.ico", http.NotFound)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// // = CHECKPOINT 1: UNCOMMENT THIS BLOCK =======================
@@ -191,15 +208,16 @@ func main() {
 		// // AddFieldToTrace ensures that this field will be populated on
 		// // *all* spans in the trace, not just the currently active one.
 		// beeline.AddFieldToTrace(r.Context(), "username", "YOUR_USERNAME_HERE")
+		// beeline.AddFieldToTrace(r.Context(), "build_id", buildID)
 		// // ============================================================
 		if r.Method == http.MethodPost {
 			withTracing(write)(w, r)
 		} else {
-			withTracing(list)(w, r)
+			list(w, r)
 		}
 	})
-	http.HandleFunc("/message", withTracing(newMessage))
+	http.HandleFunc("/message", newMessage)
 
-	logrus.Infoln("Serving on localhost:8080...")
+	logrus.WithField("build_id", buildID).Infoln("Serving on localhost:8080...")
 	logrus.Fatalln(http.ListenAndServe(":8080", hnynethttp.WrapHandler(http.DefaultServeMux)))
 }
