@@ -14,11 +14,11 @@ import (
 )
 
 const (
-	HONEYCOMB_API_KEY = "e841bedc1eb9ffd93c4c958b74e2d877"
+	HONEYCOMB_API_KEY = "cca741ec8e650e699e8fef93126907e1"
 	HONEYCOMB_DATASET = "workshop"
 
 	GCP_URL_TEMPLATE = "https://language.googleapis.com/v1/documents:analyzeSentiment?key=%s"
-	GCP_API_KEY      = "AIzaSyAXdTnJgZu0oMUb4I3VN2Mepx_KpXBB5RA"
+	GCP_API_KEY      = "AIzaSyBIpGsSaCJvogh3Jbl2_2PMV4BQR2Xc-HU"
 )
 
 // = HANDLER =======================================================

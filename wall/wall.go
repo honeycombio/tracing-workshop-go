@@ -30,7 +30,7 @@ var (
 )
 
 const (
-	HONEYCOMB_API_KEY = "e841bedc1eb9ffd93c4c958b74e2d877"
+	HONEYCOMB_API_KEY = "cca741ec8e650e699e8fef93126907e1"
 	HONEYCOMB_DATASET = "workshop"
 
 	linkToHashtag = `<a href="https://twitter.com/hashtag/$1">#$1</a>`
